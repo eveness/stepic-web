@@ -1,2 +1,5 @@
 pythonpath = '/home/box/web/ask/ask'
 bind = '0.0.0.0:8000'
+errorlog = '/home/box/logs/gunicorn-error.log'
+accesslog = '/home/box/logs/gunicorn-access.log'
+loglevel = 'debug'
