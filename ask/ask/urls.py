@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from qa.views import test
 
 urlpatterns = patterns('',
     url(r'^$', 'qa.views.test'),
