@@ -1,12 +1,8 @@
-from django.conf.urls import patterns, include, url
-from qa.views import test
+from django.conf.urls import url, include
+from django.contrib import admin
 
-urlpatterns = patterns('',
-    url(r'^$', 'qa.views.test'),
-    url(r'^login/$', 'qa.views.test'),
-    url(r'^signup/$', 'qa.views.test'),
-    url(r'^question/(\d+)$', 'qa.views.test'),
-    url(r'^ask/.*$', 'qa.views.test'),
-    url(r'^popular/$', 'qa.views.test'),
-    url(r'^new/$', 'qa.views.test'),
-)
+urlpatterns = [
+    url(r'^', include('qa.urls'))
+]
+
+admin.autodiscover()

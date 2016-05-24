@@ -5,9 +5,10 @@ $script = <<SCRIPT
     apt-get -y install mc
     apt-get -y install nginx
     apt-get install python
+    apt-get install libsqlite3-dev
     apt-get install -y python-pip
     pip install gunicorn
-    pip install Django==1.9.6
+    pip install django==1.6.1
 SCRIPT
 
 Vagrant.configure("2") do |config|
