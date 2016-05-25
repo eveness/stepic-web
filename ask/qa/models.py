@@ -33,6 +33,9 @@ class Question(models.Model):
     def get_url(self):
         return "/question/{0}/".format(self.id)
 
+    def get_absolute_url(self):
+        return reverse('question', kwargs={'pk_question': self.pk})
+
     #Question - вопрос
     #title - заголовок вопроса
     #text - полный текст вопроса
