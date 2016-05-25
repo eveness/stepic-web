@@ -51,26 +51,17 @@ def popular(request, *args, **kwargs):
 def question(request, pk_question):
     gs = get_object_or_404(Question, id=pk_question)
     answers = gs.answer_set.all()
-    if request.method == "POST":
-        form = AnswerForm(request.POST)
-        if form.is_valid():
-            _ = form.save()
-            redirect_url = gs.get_absolute_url()
-            return HttpResponseRedirect(redirect_url)
-    else:
-        form = AnswerForm(initial={'question': str(pk_question)})
 
     return render(
         request, 'question.html',
-        {'question': gs, 'form': form, 'answers': answers,
+        {'question': gs, 'answers': answers,
          'user': request.user, 'session': request.session})
 
 
 def question_detail(request, pk_question):
     qs = get_object_or_404(Question, id=pk_question)
     answers = qs.answer_set.all()
-    form = AnswerForm(initial={'question': str(pk_question)})
     return render(request, 'question.html', {
         'question': qs, 'answers': answers,
-        'form': form, 'user': request.user, 'session': request.session
+        'user': request.user, 'session': request.session
     })
