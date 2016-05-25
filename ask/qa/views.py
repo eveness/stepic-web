@@ -3,6 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from models import Question
 from models import Answer
+from forms import AskForm
+from forms import AnswerForm
 
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_GET
@@ -51,17 +53,43 @@ def popular(request, *args, **kwargs):
 def question(request, pk_question):
     gs = get_object_or_404(Question, id=pk_question)
     answers = gs.answer_set.all()
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            _ = form.save()
+            redirect_url = gs.get_absolute_url()
+            return HttpResponseRedirect(redirect_url)
+    else:
+        form = AnswerForm(initial={'question': str(pk_question)})
 
     return render(
         request, 'question.html',
-        {'question': gs, 'answers': answers,
+        {'question': gs, 'form': form, 'answers': answers,
          'user': request.user, 'session': request.session})
+
+
+def ask(request):
+    if request.method == "POST":
+        try:
+            form = AskForm(request.POST)
+            if form.is_valid():
+                form._user = request.user
+                post = form.save()
+                redirect_url = post.get_absolute_url()
+                print 'redirect to: ', redirect_url
+                return HttpResponseRedirect(redirect_url)
+        except Exception as error_message:
+            print error_message
+    else:
+        form = AskForm()
+    return render(request, 'ask.html', {'form': form})
 
 
 def question_detail(request, pk_question):
     qs = get_object_or_404(Question, id=pk_question)
     answers = qs.answer_set.all()
+    form = AnswerForm(initial={'question': str(pk_question)})
     return render(request, 'question.html', {
         'question': qs, 'answers': answers,
-        'user': request.user, 'session': request.session
+        'form': form, 'user': request.user, 'session': request.session
     })
