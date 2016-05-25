@@ -1,5 +1,9 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
+from django.contrib.auth.models import User
+from models import Question
+from models import Answer
+
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_GET
 from django.core.paginator import Paginator
