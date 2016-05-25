@@ -5,6 +5,9 @@ from models import Question
 from models import Answer
 from forms import AskForm
 from forms import AnswerForm
+from forms import LoginForm
+from forms import SignupForm
+from django.contrib.auth import login, logout
 
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_GET
@@ -93,3 +96,37 @@ def question_detail(request, pk_question):
         'question': qs, 'answers': answers,
         'form': form, 'user': request.user, 'session': request.session
     })
+
+
+def user_signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/')
+    form = SignupForm()
+    return render(request, 'signup.html', {'form': form,
+                                           'user': request.user,
+                                           'session': request.session})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/')
+    form = LoginForm()
+    return render(request, 'login.html', {'form': form,
+                                          'user': request.user,
+                                          'session': request.session})
+
+@require_GET
+def user_logout(request):
+    logout(request)
+    redirect_url = request.GET.get('continue', '/')
+    return HttpResponseRedirect(redirect_url)
