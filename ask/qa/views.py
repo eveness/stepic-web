@@ -5,10 +5,6 @@ from django.views.decorators.http import require_GET
 from django.core.paginator import Paginator
 
 
-def test(request, *args, **kwargs):
-    return HttpResponse('OK')
-
-
 @require_GET
 def index(request, *args, **kwargs):
 
